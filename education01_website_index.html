@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BrightPath Learning — Education Website</title>
+  <meta name="description" content="BrightPath Learning — modern education site. Single-file 5-page design using HTML5 semantic elements." />
+  <style>
+    /* -------------------- BASE & THEME -------------------- */
+    :root{
+      --bg:#f4fbff;
+      --card:#ffffff;
+      --accent:#1e88e5; /* bright educational blue */
+      --accent-2:#00b894; /* green accent */
+      --muted:#6b7280;
+      --glass: rgba(255,255,255,0.8);
+      --shadow: 0 6px 18px rgba(30,40,60,0.08);
+      --radius:14px;
+      font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+      color-scheme: light;
+    }
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#eef7fb);scroll-behavior: smooth;}
+    a{color:var(--accent);text-decoration:none;transition:0.2s}
+    a:hover{color:var(--accent-2)}
+    img{max-width:100%;height:auto;display:block;border-radius:8px}
+
+    /* -------------------- NAVBAR -------------------- */
+    .topnav{
+      background:linear-gradient(90deg,var(--card),#f7fbff);
+      position:sticky;top:0;z-index:30;backdrop-filter:blur(6px);
+      box-shadow: var(--shadow);
+    }
+    .topnav .container{
+      max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:10px 16px;
+    }
+    .brand{display:flex;gap:12px;align-items:center}
+    .brand .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:white;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,0.08)}
+    .brand h1{font-size:1rem;margin:0;color:#0f1724}
+
+    .topnav .links{display:flex;gap:8px;align-items:center}
+    .topnav a.tab{padding:10px 14px;border-radius:10px;font-weight:600;color:#0f1724}
+    .topnav a.tab:hover{background:rgba(30,136,229,0.08);color:var(--accent)}
+    .topnav a.active{background:linear-gradient(90deg, rgba(30,136,229,0.12), rgba(0,184,148,0.06));border:1px solid rgba(30,136,229,0.08);color:var(--accent)}
+
+    /* mobile menu button */
+    .icon{display:none;padding:8px;border-radius:8px;background:transparent;border:none;font-size:24px;cursor:pointer}
+
+    @media (max-width:820px){
+      .topnav .links{display:none;flex-direction:column;width:100%;gap:6px;padding:10px 12px;border-top:1px solid #eee}
+      .topnav .links.show{display:flex}
+      .icon{display:inline-flex}
+      .topnav .container{flex-wrap:wrap}
+    }
+
+    /* -------------------- LAYOUT COMPONENTS -------------------- */
+    .hero{max-width:1100px;margin:28px auto;padding:28px;background:var(--card);border-radius:16px;box-shadow:var(--shadow);display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:center}
+    .hero h2{margin:0 0 8px 0;font-size:1.8rem;color:#0f1724}
+    .hero p{margin:0;color:var(--muted);line-height:1.6}
+    .cta{margin-top:16px}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:12px 20px;border-radius:10px;background:var(--accent);color:white;font-weight:700;border:0;cursor:pointer;transition:transform 0.2s}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(30,136,229,0.3)}
+
+    .grid{max-width:1100px;margin:22px auto;display:grid;grid-template-columns:1fr 320px;gap:20px}
+    .card{background:var(--card);padding:20px;border-radius:12px;box-shadow:var(--shadow);border:1px solid #f0f4f8}
+    aside .card{position:sticky;top:90px}
+
+    footer{margin-top:40px;padding:28px 0;background:#fff;text-align:center;color:var(--muted);border-top:1px solid #eee}
+
+    /* Table styles */
+    table{width:100%;border-collapse:collapse;margin:15px 0}
+    th,td{padding:12px;border-bottom:1px solid #eef4fb;text-align:left}
+    th{font-weight:700;color:#0b1220;background-color:#f8fbff}
+    tr:hover{background-color:#fcfeff}
+
+    /* Typography & Lists */
+    h2,h3,h4{color:#0f1724}
+    ul, ol{color:var(--muted);padding-left:20px;line-height:1.6}
+    li{margin-bottom:6px}
+    .muted{color:var(--muted)}
+    .pill{display:inline-block;padding:6px 10px;border-radius:999px;background:#f0f7ff;border:1px solid rgba(30,136,229,0.06);font-weight:600;font-size:0.85rem;color:var(--accent)}
+
+    /* Page switching logic */
+    main section{display:none}
+    main section.active{display:block}
+
+    /* Animation */
+    .fadein{animation:fade 0.5s ease-out}
+    @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+    /* Forms */
+    fieldset{border:1px dashed #e6f0fb;padding:20px;border-radius:10px;margin:0}
+    legend{padding:0 8px;color:var(--accent);font-weight:700}
+    input, select, textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #cbd5e1;margin-top:6px;box-sizing:border-box;font-family:inherit}
+    input:focus, select:focus, textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(30,136,229,0.1)}
+
+    /* Responsive */
+    @media (max-width:960px){
+      .hero{grid-template-columns:1fr;}
+      .grid{grid-template-columns:1fr}
+      .topnav .container{padding:10px}
+    }
+  </style>
+</head>
+<body>
+
+  <header class="topnav" role="banner">
+    <div class="container">
+      <div class="brand">
+        <div class="logo" aria-hidden>BP</div>
+        <div>
+          <h1>BrightPath Learning</h1>
+          <div class="muted" style="font-size:12px">Explore. Learn. Succeed.</div>
+        </div>
+      </div>
+
+      <nav class="navigation" role="navigation" aria-label="Main navigation">
+        <button class="icon" onclick="toggleMenu()" aria-label="Toggle menu">&#9776;</button>
+        <div class="links" id="myTopnav">
+          <a href="#home" class="tab" data-route="home">Home</a>
+          <a href="#about" class="tab" data-route="about">About</a>
+          <a href="#courses" class="tab" data-route="courses">Courses</a>
+          <a href="#admissions" class="tab" data-route="admissions">Admissions</a>
+          <a href="#contact" class="tab" data-route="contact">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="active fadein">
+      <div class="hero">
+        <article>
+          <h2>Unlock Your Potential</h2>
+          <p>We provide student-centred online and blended programs designed to build market-ready skills. Project-based learning, expert mentors, and career support tailored to you.</p>
+          <div class="cta">
+            <button class="btn" onclick="navigate('courses')">Browse Courses</button>
+            <span style="margin-left:12px" class="pill">Accredited • Flexible</span>
+          </div>
+
+          <section aria-labelledby="features" style="margin-top:24px">
+            <h3 id="features" style="font-size:1.1rem;margin:0 0 12px 0">Why choose BrightPath?</h3>
+            <ul>
+              <li>Small cohort sizes and personalised feedback</li>
+              <li>Industry projects built into every module</li>
+              <li>Career services & interview prep included</li>
+            </ul>
+          </section>
+        </article>
+
+        <aside>
+          <div class="card" style="padding:10px">
+            <figure style="margin:0">
+              <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=800&auto=format&fit=crop" alt="Students learning"/>
+              <figcaption class="muted" style="font-size:13px;margin-top:8px;text-align:center">Join 5,000+ alumni worldwide.</figcaption>
+            </figure>
+          </div>
+        </aside>
+      </div>
+
+      <div class="grid">
+        <section class="card">
+          <h3 style="margin-top:0">Latest Updates</h3>
+          <article>
+            <h4 style="margin:6px 0">Scholarship for Data Science</h4>
+            <p class="muted">Need-based scholarships now open for July intake. <time datetime="2026-07-01">Deadline: July 1</time>.</p>
+          </article>
+          <hr style="border:0;border-top:1px solid #eee;margin:15px 0" />
+          <article>
+            <h4 style="margin:6px 0">New AI Ethics Module</h4>
+            <p class="muted">A 4-week online short course covering responsible AI practices.</p>
+          </article>
+        </section>
+
+        <aside>
+          <div class="card">
+            <h4 style="margin:0 0 12px 0">Quick Links</h4>
+            <nav aria-label="Quick links">
+              <ul style="list-style:none;padding:0">
+                <li><a href="#courses" onclick="navigate('courses')">→ View all courses</a></li>
+                <li><a href="#admissions" onclick="navigate('admissions')">→ How to apply</a></li>
+                <li><a href="#contact" onclick="navigate('contact')">→ Request info</a></li>
+              </ul>
+            </nav>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="about" aria-labelledby="about-heading" class="fadein">
+      <div class="card" style="max-width:1100px;margin:28px auto;">
+        <header>
+          <h2 id="about-heading">About Us</h2>
+          <p class="muted">We bridge the gap between academic theory and industry demands.</p>
+        </header>
+
+        <div style="display:grid;grid-template-columns:1fr 360px;gap:24px;margin-top:18px;align-items:start">
+          <article>
+            <p>Founded by educators and industry leaders, we blend pedagogy and practical projects. Our programs include mentorship and career guidance to ensure you are job-ready.</p>
+
+            <section>
+              <h3>Core Values</h3>
+              <ol>
+                <li><strong>Student-first:</strong> Personalised learning paths.</li>
+                <li><strong>Competency:</strong> We focus on what you can build.</li>
+                <li><strong>Inclusion:</strong> Accessible education for all.</li>
+              </ol>
+            </section>
+
+            <section>
+              <h3>Alumni Outcomes</h3>
+              <p>We track student success rigorously. See our latest data below.</p>
+              
+              <table aria-describedby="outcomes-desc">
+                <caption id="outcomes-desc" style="text-align:left;padding-bottom:8px;font-weight:700">Employment Rates (2024)</caption>
+                <thead>
+                  <tr><th>Program</th><th>Employed</th><th>Further Study</th><th>Avg Salary</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Data Science</td><td>72%</td><td>12%</td><td>$45,000</td></tr>
+                  <tr><td>Web Development</td><td>68%</td><td>18%</td><td>$32,000</td></tr>
+                  <tr><td>Business Analytics</td><td>65%</td><td>20%</td><td>$38,000</td></tr>
+                </tbody>
+              </table>
+            </section>
+          </article>
+
+          <aside>
+            <div class="card">
+              <h4 style="margin-top:0">Our Campus</h4>
+              <img src="https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=800&auto=format&fit=crop" alt="Campus library"/>
+              <p class="muted" style="font-size:13px;margin-top:8px">State-of-the-art computer labs available 24/7.</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="courses" aria-labelledby="courses-heading" class="fadein">
+      <div class="card" style="max-width:1100px;margin:28px auto;">
+        <header>
+          <h2 id="courses-heading">Courses & Programs</h2>
+          <p class="muted">Choose from short courses, micro-credentials and full diplomas.</p>
+        </header>
+
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:18px;align-items:start">
+          <article>
+            <section>
+              <h3>Featured Programs</h3>
+
+              <article class="card" style="margin-bottom:16px">
+                <h4 style="margin:6px 0;color:var(--accent)">Data Science Diploma</h4>
+                <p class="muted">24 weeks • Part-time • Project capstone</p>
+                <p><strong>What you'll build:</strong></p>
+                <ul>
+                  <li>End-to-end predictive models</li>
+                  <li>Data pipelines using Cloud API</li>
+                  <li>Final capstone for employers</li>
+                </ul>
+              </article>
+
+              <article class="card" style="margin-bottom:16px">
+                <h4 style="margin:6px 0;color:var(--accent)">Frontend Development</h4>
+                <p class="muted">8 weeks • Live workshops</p>
+                <p><strong>Curriculum Roadmap:</strong></p>
+                <ol>
+                  <li>HTML5 & Semantic Structure</li>
+                  <li>CSS Grid & Flexbox</li>
+                  <li>JavaScript ES6+ & React</li>
+                </ol>
+              </article>
+
+              <h3 style="margin-top:24px">Course Fees & Duration</h3>
+              <table>
+                <thead>
+                  <tr><th>Course Name</th><th>Duration</th><th>Level</th><th>Fee (USD)</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Data Science Diploma</td><td>24 Weeks</td><td>Advanced</td><td>$1,800</td></tr>
+                  <tr><td>Frontend Micro</td><td>8 Weeks</td><td>Beginner</td><td>$350</td></tr>
+                  <tr><td>AI Ethics</td><td>4 Weeks</td><td>Intro</td><td>$120</td></tr>
+                </tbody>
+              </table>
+            </section>
+          </article>
+
+          <aside>
+            <div class="card">
+              <h4 style="margin-top:0">Next Cohorts</h4>
+              <ul style="list-style:none;padding:0">
+                <li>📅 <strong>Sept 15:</strong> Data Science</li>
+                <li>📅 <strong>Oct 01:</strong> Frontend Dev</li>
+                <li>📅 <strong>Rolling:</strong> AI Ethics</li>
+              </ul>
+              <button class="btn" style="width:100%;justify-content:center" onclick="navigate('admissions')">Apply Now</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section id="admissions" aria-labelledby="admissions-heading" class="fadein">
+      <div class="card" style="max-width:1100px;margin:28px auto;">
+        <header>
+          <h2 id="admissions-heading">Admissions Process</h2>
+          <p class="muted">Simple application process — decisions within 7 business days.</p>
+        </header>
+
+        <article style="margin-top:24px">
+          <h3>How to Apply</h3>
+          <ol>
+            <li>Create an account & choose your program.</li>
+            <li>Upload transcripts & CV.</li>
+            <li>Complete the short logic assessment.</li>
+            <li>Interview with a program mentor.</li>
+            <li>Receive offer letter & pay deposit.</li>
+          </ol>
+
+          <section style="margin-top:24px">
+            <h3>Required Documents</h3>
+            <ul>
+              <li>Valid ID (Passport/National ID)</li>
+              <li>High School or Degree Transcripts</li>
+              <li>Updated Résumé</li>
+            </ul>
+          </section>
+          
+          <div style="margin-top:20px;padding:15px;background:#f0f7ff;border-radius:10px">
+             <strong>Note on Scholarships:</strong> We offer merit-based financial aid. Please check the "Financial Aid" box in the form below when applying.
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" aria-labelledby="contact-heading" class="fadein">
+      <div class="card" style="max-width:1100px;margin:28px auto;">
+        <header>
+          <h2 id="contact-heading">Get in Touch</h2>
+          <p class="muted">Have questions? We'd love to hear from you.</p>
+        </header>
+
+        <div style="display:grid;grid-template-columns:1fr 320px;gap:24px;margin-top:18px;align-items:start">
+          <article>
+            <form id="contactForm" onsubmit="submitForm(event)">
+              <fieldset>
+                <legend>Inquiry Form</legend>
+                
+                <label for="name">Full Name</label>
+                <input id="name" name="name" type="text" placeholder="John Doe" required />
+                
+                <div style="height:12px"></div>
+                
+                <label for="email">Email Address</label>
+                <input id="email" name="email" type="email" placeholder="john@example.com" required />
+                
+                <div style="height:12px"></div>
+                
+                <label for="program">Interested Program</label>
+                <select id="program" name="program">
+                  <option>Data Science Diploma</option>
+                  <option>Frontend Web Micro</option>
+                  <option>General Inquiry</option>
+                </select>
+                
+                <div style="height:12px"></div>
+                
+                <label for="message">Message</label>
+                <textarea id="message" name="message" rows="5" placeholder="How can we help you?"></textarea>
+                
+                <div style="height:16px"></div>
+                
+                <button type="submit" class="btn">Send Message</button>
+              </fieldset>
+            </form>
+
+            <div id="formResult" style="margin-top:16px"></div>
+          </article>
+
+          <aside>
+            <div class="card">
+              <h4 style="margin-top:0">Contact Info</h4>
+              <address style="font-style:normal;line-height:1.6;color:var(--muted)">
+                <strong>BrightPath HQ</strong><br />
+                12 Knowledge Avenue<br />
+                Accra, Ghana<br /><br />
+                📞 +233 50 123 4567<br />
+                ✉️ admissions@brightpath.edu
+              </address>
+              
+              <h4 style="margin-bottom:8px;margin-top:20px">Office Hours</h4>
+              <p class="muted" style="margin:0">Mon — Fri: 9:00 — 17:00</p>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div style="max-width:1100px;margin:0 auto;padding:0 12px;">
+      <p><small>&copy; 2025 BrightPath Learning. Project for Education (Index 1). Designed with HTML5.</small></p>
+    </div>
+  </footer>
+
+  <script>
+    // 1. ROUTING LOGIC (Simulates 5 pages)
+    const sections = Array.from(document.querySelectorAll('main section'));
+    const tabs = Array.from(document.querySelectorAll('.topnav a.tab'));
+
+    function setActive(route){
+      // Hide all sections
+      sections.forEach(s => s.classList.remove('active'));
+      
+      // Show target section (default to home if not found)
+      const target = document.getElementById(route) || document.getElementById('home');
+      target.classList.add('active');
+      window.scrollTo(0,0);
+
+      // Update Nav State
+      tabs.forEach(t => {
+        t.classList.toggle('active', t.dataset.route === route);
+      });
+      
+      // Close mobile menu if open
+      const nav = document.getElementById("myTopnav");
+      if(nav.classList.contains('show')) {
+        nav.classList.remove('show');
+      }
+    }
+
+    // Handle button clicks that aren't nav links
+    function navigate(route){
+      window.location.hash = route;
+    }
+
+    // Listen for hash changes in URL
+    window.addEventListener('hashchange', () => {
+      const route = window.location.hash.replace('#','') || 'home';
+      setActive(route);
+    });
+
+    // Initial Load
+    const initialRoute = window.location.hash.replace('#','') || 'home';
+    setActive(initialRoute);
+
+    // 2. MOBILE MENU TOGGLE (W3Schools Logic)
+    function toggleMenu() {
+      const x = document.getElementById("myTopnav");
+      if (x.className === "links") {
+        x.className += " show";
+      } else {
+        x.className = "links";
+      }
+    }
+
+    // 3. FORM HANDLING
+    function submitForm(e) {
+      e.preventDefault(); // Stop actual submission
+      const resultDiv = document.getElementById('formResult');
+      
+      // Simulate success
+      resultDiv.innerHTML = `
+        <div style="background-color:#e6fffa; color:#00695c; padding:12px; border-radius:8px; border:1px solid #b2dfdb; display:flex; align-items:center; gap:10px;">
+          <span style="font-size:20px">✓</span>
+          <div>
+            <strong>Success!</strong><br/>
+            Thank you, ${e.target.name.value}. We have received your inquiry.
+          </div>
+        </div>
+      `;
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>
